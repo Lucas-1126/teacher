@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Burnaby Central – Teachers</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0f;
+    --card: #141417;
+    --border: #2a2a30;
+    --accent: #e8c97d;
+    --text: #f0ede6;
+    --muted: #6b6878;
+    --hover-bg: #1c1c22;
+    --green: #6fcf97;
+    --red: #eb5757;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 40px 20px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -20%; left: -10%;
+    width: 60%; height: 60%;
+    background: radial-gradient(ellipse, rgba(232,201,125,0.07) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -20%; right: -10%;
+    width: 60%; height: 60%;
+    background: radial-gradient(ellipse, rgba(125,184,232,0.06) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .school-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(232,201,125,0.3);
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  h1 span { color: var(--accent); }
+
+  .subtitle {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* Tabs: List / Ranking */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 28px;
+    justify-content: center;
+  }
+
+  .tab {
+    padding: 8px 22px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+
+  .tab.active {
+    background: var(--accent);
+    color: #0d0d0f;
+    border-color: var(--accent);
+  }
+
+  /* Teacher card */
+  .teacher-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+    animation: fadeUp 0.4s ease both;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .teacher-card:hover {
+    border-color: rgba(232,201,125,0.2);
+  }
+
+  .teacher-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    border-radius: 3px 0 0 3px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .teacher-card:hover::before { opacity: 1; }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .teacher-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .teacher-dept {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* Stars */
+  .stars {
+    display: flex;
+    gap: 4px;
+  }
+
+  .star {
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--border);
+    transition: color 0.15s, transform 0.15s;
+    line-height: 1;
+  }
+
+  .star:hover, .star.active { color: var(--accent); }
+  .star:hover { transform: scale(1.2); }
+
+  .rating-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-left: 8px;
+    align-self: center;
+  }
+
+  /* Card actions row */
+  .card-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+
+  .like-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+
+  .like-btn:hover {
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  .like-btn.liked {
+    border-color: var(--green);
+    color: var(--green);
+    background: rgba(111,207,151,0.08);
+  }
+
+  /* Comment input */
+  .comment-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .comment-row input {
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .comment-row input:focus { border-color: rgba(232,201,125,0.4); }
+  .comment-row input::placeholder { color: var(--muted); }
+
+  .send-btn {
+    background: var(--accent);
+    color: #0d0d0f;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: opacity 0.2s;
+  }
+
+  .send-btn:hover { opacity: 0.85; }
+
+  /* Comments display */
+  .comments-list {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .comment-item {
+    background: rgba(255,255,255,0.03);
+    border-left: 2px solid var(--border);
+    border-radius: 0 8px 8px 0;
+    padding: 7px 12px;
+    font-size: 13px;
+    color: var(--text);
+  }
+
+  /* ===== RANKING VIEW ===== */
+  #ranking-view { display: none; }
+
+  .ranking-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px 24px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .rank-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--muted);
+    width: 36px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .rank-num.gold   { color: #e8c97d; }
+  .rank-num.silver { color: #b0b8c1; }
+  .rank-num.bronze { color: #cd7f5a; }
+
+  .rank-info { flex: 1; }
+
+  .rank-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .rank-dept {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .rank-score {
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .rank-stars {
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  .rank-likes {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* Back link */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    margin-bottom: 32px;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover { color: var(--accent); }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="back-link">← Back</a>
+
+  <div class="header">
+    <div class="school-tag">Burnaby Central Secondary</div>
+    <h1 id="page-title">Subject <span>Teachers</span></h1>
+    <p class="subtitle" id="page-subtitle"></p>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('list')">All Teachers</div>
+    <div class="tab" onclick="showTab('ranking')">🏆 Rankings</div>
+  </div>
+
+  <div id="list-view">
+    <div id="teacher-list"></div>
+  </div>
+
+  <div id="ranking-view">
+    <div id="ranking-list"></div>
+  </div>
+</div>
+
+<script>
+const data = {
+  math: [
+    { name: "K. Boucher",        dept: "Mathematics" },
+    { name: "C. Chang",          dept: "Mathematics" },
+    { name: "M. Cook",           dept: "Mathematics" },
+    { name: "C. DeSiena",        dept: "Mathematics" },
+    { name: "G. Hendry",         dept: "AP Coordinator / Dept Head: Mathematics" },
+    { name: "K. Herndier",       dept: "Mathematics" },
+    { name: "S. Huang",          dept: "Mathematics" },
+    { name: "K. Kraemer",        dept: "Mathematics" },
+    { name: "S. Lei",            dept: "Mathematics" },
+    { name: "B. Mueller",        dept: "Mathematics" },
+    { name: "M. vandeWall",      dept: "Learning Support / Mathematics" },
+    { name: "C. Van Maarseveen", dept: "Mathematics / Sciences" },
+  ],
+  science: [
+    { name: "M. Ali",            dept: "ADST: Technology Education / Science" },
+    { name: "E. Byman",          dept: "Science" },
+    { name: "L. Falsetto",       dept: "Dept Head: Science / Leadership" },
+    { name: "M. Joe",            dept: "Science" },
+    { name: "P. Kim",            dept: "Science" },
+    { name: "B. Li",             dept: "Sciences" },
+    { name: "J. Mah",            dept: "Sciences / VPA: Media Arts" },
+    { name: "D. Moore",          dept: "Science / Career Programs / CLE" },
+    { name: "Z. Rezaie",         dept: "Science" },
+    { name: "M. Siu",            dept: "CLE / Science" },
+    { name: "C. Van Maarseveen", dept: "Mathematics / Sciences" },
+    { name: "Y. Yu",             dept: "Modern Languages / Science" },
+  ],
+  english: [
+    { name: "M. Bustalinio",      dept: "ELL / English" },
+    { name: "H. Couture",         dept: "English" },
+    { name: "G. D'Angelo",        dept: "English" },
+    { name: "W. Hartwick-Knight", dept: "English / ELL / Social Studies" },
+    { name: "G. Nevgodovskyy",    dept: "English" },
+    { name: "A. Pattenaude",      dept: "Dept Head: VPA Dance / English" },
+    { name: "K. Payne",           dept: "Dept Head: English / SOGI Lead" },
+    { name: "E. Proctor",         dept: "English / VPA Drama" },
+    { name: "B. Williams",        dept: "English" },
+    { name: "B. Wineberg",        dept: "English" },
+  ],
+  social: [
+    { name: "B. Barichello",      dept: "Social Studies" },
+    { name: "A. Branco",          dept: "Social Studies" },
+    { name: "W. Colling",         dept: "Social Studies" },
+    { name: "D. Cooper",          dept: "Social Studies / Learning Support" },
+    { name: "P. Finlayson",       dept: "Social Studies" },
+    { name: "W. Hartwick-Knight", dept: "English / ELL / Social Studies" },
+    { name: "F. Jolliffe",        dept: "Social Studies" },
+    { name: "D. Pereira",         dept: "Dept Head: Social Studies" },
+  ],
+  other: [
+    { name: "A. Adam",               dept: "VPA – Music" },
+    { name: "A. Bullen",             dept: "Art / Languages" },
+    { name: "A. Colaiacovo",         dept: "Dept Head: PHE / First Aid" },
+    { name: "B. Dunse",              dept: "ADST: Business Technology / Indigenous Ed" },
+    { name: "A. Fricker",            dept: "ADST: Technology Education" },
+    { name: "K. Gallivan",           dept: "Modern Languages" },
+    { name: "D. Hamilton",           dept: "VPA Art / Business Education" },
+    { name: "F. Hawley",             dept: "ADST: Technology Education" },
+    { name: "K. Jansen",             dept: "ADST: Business Technology" },
+    { name: "R. Kamiya",             dept: "ADST: Business Technology" },
+    { name: "H. Kingra",             dept: "PHE" },
+    { name: "D. Kraemer",            dept: "ADST: Home Economics" },
+    { name: "P. Kuhn",               dept: "Physical & Health Education" },
+    { name: "C. Lan",                dept: "ADST: Business Education" },
+    { name: "P. Ma",                 dept: "Languages" },
+    { name: "M. Morabito-Chisholm",  dept: "Dept Head: ADST Home Economics" },
+    { name: "P. Neves",              dept: "Dept Head: Modern Languages / CLE" },
+    { name: "K. Palosaari",          dept: "ADST: Home Economics" },
+    { name: "A. Steko",              dept: "VPA – Art" },
+    { name: "B. Stewart",            dept: "VPA: Drama" },
+    { name: "J. Turrin",             dept: "Leadership / PHE" },
+    { name: "A. Vagnarelli",         dept: "PHE / Athletic Director" },
+    { name: "B. Veeken",             dept: "Physical & Health Education" },
+    { name: "K. White",              dept: "VPA: Music (BAND)" },
+    { name: "N. Xiao",               dept: "ADST: Home Economics" },
+    { name: "Y. Yu",                 dept: "Modern Languages / Science" },
+    { name: "A. Zakus",              dept: "Modern Languages" },
+    { name: "E. Zen",                dept: "LSS / PHE / CLE" },
+  ],
+  counselor: [
+    { name: "S. Dhaliwal",     dept: "Acting Dept Head – Students U–Z & AVPA" },
+    { name: "R. Jones",        dept: "Students M–T" },
+    { name: "J. Gatzke",       dept: "Students M–T" },
+    { name: "S. Tirling",      dept: "Students H–L & Indigenous" },
+    { name: "B. Lawrence",     dept: "Dept Head – Students H–L & Indigenous (On Leave)" },
+    { name: "R. Westinghouse", dept: "Students A–G" },
+  ],
+};
+
+const subjectLabels = {
+  math: "Mathematics", science: "Science", english: "English",
+  social: "Social Studies", other: "Other Subjects", counselor: "Counselors"
+};
+
+const subject = (new URLSearchParams(window.location.search).get("subject") || "").toLowerCase();
+const teachers = data[subject] || [];
+
+const label = subjectLabels[subject] || subject;
+document.getElementById("page-title").innerHTML = `${label} <span>Teachers</span>`;
+document.getElementById("page-subtitle").textContent = `${teachers.length} staff members · Rate and comment below`;
+
+// ===== 核心：评分存储为数组，支持多次投票 =====
+function getRatings(id) {
+  return JSON.parse(localStorage.getItem(id + "-ratings") || "[]");
+}
+function addRating(id, num) {
+  const ratings = getRatings(id);
+  ratings.push(num);
+  localStorage.setItem(id + "-ratings", JSON.stringify(ratings));
+}
+function getAvgRating(id) {
+  const ratings = getRatings(id);
+  if (ratings.length === 0) return 0;
+  return ratings.reduce((a, b) => a + b, 0) / ratings.length;
+}
+function getRatingCount(id) {
+  return getRatings(id).length;
+}
+
+// ===== Build teacher cards =====
+const listContainer = document.getElementById("teacher-list");
+
+teachers.forEach((t, idx) => {
+  const id = t.name.replace(/\W/g, "").toLowerCase();
+  const div = document.createElement("div");
+  div.className = "teacher-card";
+  div.style.animationDelay = (idx * 0.05) + "s";
+  div.innerHTML = `
+    <div class="card-top">
+      <div>
+        <div class="teacher-name">${t.name}</div>
+        <div class="teacher-dept">${t.dept}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <div class="stars">
+          ${[1,2,3,4,5].map(n =>
+            `<span class="star" data-id="${id}" data-num="${n}">★</span>`
+          ).join("")}
+        </div>
+        <span class="rating-label" id="rating-label-${id}">Not rated</span>
+      </div>
+    </div>
+    <div class="card-actions">
+      <span class="like-btn" id="like-btn-${id}" onclick="addLike('${id}')">
+        👍 <span id="like-count-${id}">0</span>
+      </span>
+    </div>
+    <div class="comment-row">
+      <input id="input-${id}" placeholder="Leave a comment...">
+      <button class="send-btn" onclick="addComment('${id}')">Send</button>
+    </div>
+    <div class="comments-list" id="comments-${id}"></div>
+  `;
+  listContainer.appendChild(div);
+});
+
+// ===== Stars：每次点击都算一次新投票 =====
+document.querySelectorAll(".star").forEach(star => {
+  star.addEventListener("click", () => {
+    const id = star.dataset.id;
+    const num = parseInt(star.dataset.num);
+
+    addRating(id, num);          // 追加一次投票
+    const avg = getAvgRating(id);
+    const count = getRatingCount(id);
+
+    updateStarsDisplay(id, avg); // 显示平均值
+    document.getElementById("rating-label-" + id).textContent =
+      `avg ${avg.toFixed(1)} / 5  (${count} votes)`;
+
+    renderRanking();
+  });
+
+  // hover 预览效果
+  star.addEventListener("mouseenter", () => {
+    const id = star.dataset.id;
+    const num = parseInt(star.dataset.num);
+    document.querySelectorAll(`.star[data-id="${id}"]`).forEach((s, i) => {
+      s.style.color = i < num ? "#e8c97d" : "";
+    });
+  });
+  star.addEventListener("mouseleave", () => {
+    const id = star.dataset.id;
+    const avg = getAvgRating(id);
+    updateStarsDisplay(id, avg);
+  });
+});
+
+// 用平均值点亮星星（支持小数，比如 3.5 颗）
+function updateStarsDisplay(id, avg) {
+  document.querySelectorAll(`.star[data-id="${id}"]`).forEach((s, i) => {
+    if (avg >= i + 1) {
+      s.style.color = "#e8c97d";       // 完整星
+    } else if (avg > i) {
+      s.style.color = "#c8a84b";       // 半颗星用深一点的金色
+    } else {
+      s.style.color = "";              // 还原灰色
+    }
+  });
+}
+
+// ===== 点赞：每次点击 +1，没有上限 =====
+function addLike(id) {
+  const count = parseInt(localStorage.getItem(id + "-like") || 0) + 1;
+  localStorage.setItem(id + "-like", count);
+  document.getElementById("like-count-" + id).textContent = count;
+
+  // 短暂动画反馈
+  const btn = document.getElementById("like-btn-" + id);
+  btn.classList.add("liked");
+  btn.style.transform = "scale(1.2)";
+  setTimeout(() => { btn.style.transform = ""; }, 200);
+
+  renderRanking();
+}
+
+// ===== Comment =====
+function addComment(id) {
+  const input = document.getElementById("input-" + id);
+  if (!input.value.trim()) return;
+  const comments = JSON.parse(localStorage.getItem(id + "-comments") || "[]");
+  comments.push(input.value.trim());
+  localStorage.setItem(id + "-comments", JSON.stringify(comments));
+  input.value = "";
+  loadComments(id);
+}
+
+function loadComments(id) {
+  const container = document.getElementById("comments-" + id);
+  if (!container) return;
+  const comments = JSON.parse(localStorage.getItem(id + "-comments") || "[]");
+  container.innerHTML = comments.map(c =>
+    `<div class="comment-item">💬 ${c}</div>`
+  ).join("");
+}
+
+// ===== Ranking：按平均评分排，点赞作为加分 =====
+function renderRanking() {
+  const scored = teachers.map(t => {
+    const id = t.name.replace(/\W/g, "").toLowerCase();
+    const avg   = getAvgRating(id);
+    const count = getRatingCount(id);
+    const likes = parseInt(localStorage.getItem(id + "-like") || 0);
+    // 综合分：平均分×10 + 点赞数（点赞权重较小）
+    const score = avg * 10 + likes * 0.5;
+    return { ...t, id, avg, count, likes, score };
+  }).sort((a, b) => b.score - a.score);
+
+  const rankContainer = document.getElementById("ranking-list");
+  rankContainer.innerHTML = "";
+
+  scored.forEach((t, i) => {
+    const div = document.createElement("div");
+    div.className = "ranking-card";
+    div.style.animationDelay = (i * 0.04) + "s";
+
+    const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `#${i + 1}`;
+    const starStr = t.avg > 0
+      ? `${"★".repeat(Math.round(t.avg))}${"☆".repeat(5 - Math.round(t.avg))}`
+      : "☆☆☆☆☆";
+    const avgText = t.avg > 0
+      ? `${t.avg.toFixed(1)} / 5 <span style="color:var(--muted);font-size:11px">(${t.count} votes)</span>`
+      : `<span style="color:var(--muted)">—</span>`;
+
+    div.innerHTML = `
+      <div class="rank-num">${medal}</div>
+      <div class="rank-info">
+        <div class="rank-name">${t.name}</div>
+        <div class="rank-dept">${t.dept}</div>
+      </div>
+      <div class="rank-score">
+        <div class="rank-stars">${starStr} ${avgText}</div>
+        <div class="rank-likes">👍 ${t.likes} likes</div>
+      </div>
+    `;
+    rankContainer.appendChild(div);
+  });
+}
+
+// ===== Tabs =====
+function showTab(tab) {
+  document.querySelectorAll(".tab").forEach((t, i) => {
+    t.classList.toggle("active", (i === 0) === (tab === "list"));
+  });
+  document.getElementById("list-view").style.display    = tab === "list"    ? "block" : "none";
+  document.getElementById("ranking-view").style.display = tab === "ranking" ? "block" : "none";
+  if (tab === "ranking") renderRanking();
+}
+
+// ===== Init =====
+teachers.forEach(t => {
+  const id = t.name.replace(/\W/g, "").toLowerCase();
+
+  // 点赞数
+  document.getElementById("like-count-" + id).textContent =
+    localStorage.getItem(id + "-like") || 0;
+
+  // 平均评分
+  const avg   = getAvgRating(id);
+  const count = getRatingCount(id);
+  if (avg > 0) {
+    updateStarsDisplay(id, avg);
+    document.getElementById("rating-label-" + id).textContent =
+      `avg ${avg.toFixed(1)} / 5  (${count} votes)`;
+  }
+
+  loadComments(id);
+});
+</script>
+</body>
+</html>
