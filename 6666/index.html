@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Burnaby Central Teacher</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0f;
+    --card: #141417;
+    --border: #2a2a30;
+    --accent: #e8c97d;
+    --accent2: #7db8e8;
+    --text: #f0ede6;
+    --muted: #6b6878;
+    --hover-bg: #1c1c22;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -20%; left: -10%;
+    width: 60%; height: 60%;
+    background: radial-gradient(ellipse, rgba(232,201,125,0.07) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -20%; right: -10%;
+    width: 60%; height: 60%;
+    background: radial-gradient(ellipse, rgba(125,184,232,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 520px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 52px;
+    animation: fadeDown 0.7s ease both;
+  }
+
+  .school-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(232,201,125,0.3);
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 6vw, 3rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  h1 span { color: var(--accent); }
+
+  .subtitle {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 300;
+    letter-spacing: 0.03em;
+  }
+
+  .subject-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .subject-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 0.01em;
+    transition: background 0.2s, border-color 0.2s, transform 0.18s;
+    animation: fadeUp 0.5s ease both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .subject-link::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    border-radius: 3px 0 0 3px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .subject-link:hover {
+    background: var(--hover-bg);
+    border-color: rgba(232,201,125,0.25);
+    transform: translateX(4px);
+  }
+
+  .subject-link:hover::before { opacity: 1; }
+
+  .subject-link:nth-child(1) { animation-delay: 0.10s; }
+  .subject-link:nth-child(2) { animation-delay: 0.18s; }
+  .subject-link:nth-child(3) { animation-delay: 0.26s; }
+  .subject-link:nth-child(4) { animation-delay: 0.34s; }
+  .subject-link:nth-child(5) { animation-delay: 0.42s; }
+  .subject-link:nth-child(6) { animation-delay: 0.50s; }
+
+  .subject-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .subject-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .arrow {
+    color: var(--muted);
+    font-size: 18px;
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .subject-link:hover .arrow {
+    color: var(--accent);
+    transform: translateX(3px);
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    animation: fadeUp 0.6s 0.6s ease both;
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="school-tag">Burnaby Central Secondary</div>
+    <h1>Teacher<br><span>Rankings</span></h1>
+    <p class="subtitle">Select a subject to view and rate teachers</p>
+  </div>
+
+  <div class="subject-list">
+    <a href="subject.html?subject=math" class="subject-link">
+      <div class="subject-left">
+        <div class="subject-icon">📐</div>
+        <span>Mathematics</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+    <a href="subject.html?subject=science" class="subject-link">
+      <div class="subject-left">
+        <div class="subject-icon">🔬</div>
+        <span>Science</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+    <a href="subject.html?subject=English" class="subject-link">
+      <div class="subject-left">
+        <div class="subject-icon">📖</div>
+        <span>English</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+    <a href="subject.html?subject=social" class="subject-link">
+      <div class="subject-left">
+        <div class="subject-icon">🌍</div>
+        <span>Social Studies</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+    <a href="subject.html?subject=other" class="subject-link">
+      <div class="subject-left">
+        <div class="subject-icon">🎨</div>
+        <span>Other</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+    <a href="subject.html?subject=counselor" class="subject-link">
+      <div class="subject-left">
+        <div class="subject-icon">💬</div>
+        <span>Counselor</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+  </div>
+
+  <div class="footer">BCSS · Beta v1 · Student Made</div>
+</div>
+</body>
+</html>
